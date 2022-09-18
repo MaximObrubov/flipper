@@ -13,7 +13,7 @@ export default {
     {
       file: 'dist/flipper.min.js',
       format: 'iife',
-      name: 'flipper',
+      name: 'Flipper',
       sourcemap: true,
       plugins: [terser()]
     }

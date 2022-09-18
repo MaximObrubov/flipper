@@ -5,18 +5,37 @@
   <meta http-equiv="X-UA-Compatible" content="IE=edge">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Flipper Demo</title>
-  
+
 </head>
 <body>
+
+  <div class="container not-filled">
+
+  </div>
+
+  <!-- <div class="container filled">
+    <div class="flipper__page"><img src="https://cataas.com/cat/says/hello%20world!" alt=""></div>
+    <div class="flipper__page"><img src="https://cataas.com/cat/says/hello%20world!" alt=""></div>
+    <div class="flipper__page"><img src="https://cataas.com/cat/says/hello%20world!" alt=""></div>
+    <div class="flipper__page"><img src="https://cataas.com/cat/says/hello%20world!" alt=""></div>
+    <div class="flipper__page"><img src="https://cataas.com/cat/says/hello%20world!" alt=""></div>
+  </div> -->
+
+
   <script src="dist/flipper.js"></script>
   <!-- <script src="dist/flipper.min.js"></script> -->
 
 
   <script>
-    console.group('%c Custom log:', 'background: #00A9A5; color: #00D5DB; font-size: 16px;')
-    console.log(flipper)
-    console.groupEnd()
-    
+    const fl = new Flipper(document.querySelector(".container.not-filled"), {
+      pages: [
+        `https://cataas.com/cat/says/hello%20world!?tmp=${new Date()}`,
+        `https://cataas.com/cat/says/hello%20world!?tmp=${new Date()}`,
+        `https://cataas.com/cat/says/hello%20world!?tmp=${new Date()}`,
+        `https://cataas.com/cat/says/hello%20world!?tmp=${new Date()}`,
+      ]
+    });
+    fl.init();
   </script>
 </body>
 </html>

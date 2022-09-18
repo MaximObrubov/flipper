@@ -6,7 +6,7 @@ export default {
     {
       file: 'dist/flipper.js',
       format: 'iife',
-      name: 'flipper',
+      name: 'Flipper',
       sourcemap: true,
     }
   ],
