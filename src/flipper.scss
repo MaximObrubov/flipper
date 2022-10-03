@@ -1,0 +1,21 @@
+@use './components/page.scss' as page;
+@import './scss/variables';
+
+$base_klass: "flipper";
+
+.#{$base_klass} {
+  position: relative;
+  padding: 1em;
+  font-size: var(--flipper-font-size);
+  color: var(--flipper-font-color);
+  perspective: 3000px;
+
+  // TODO: temporary added; remove it
+  background-color: white;
+  // overflow: hidden;
+
+  @include page.common;
+
+  // TODO: add conditions to different rotation direction
+  @include page.left;
+}

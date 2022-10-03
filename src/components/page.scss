@@ -1,0 +1,60 @@
+@mixin common {
+  &__page {
+    position: absolute;
+    width: 50%;
+    transition-timing-function: ease-in-out;
+    transform-origin: 0 100%;
+    // border: 1px solid var(--flipper-border-color);
+    background-color: var(--flipper-page-bg);
+    background-color: #fff;
+    transform-style: preserve-3d;
+    perspective: 500px;
+    user-select: none;
+    cursor: pointer;
+
+    &--transitioning {
+      pointer-events: none;
+    }
+
+    &--front, &--back {
+      position: absolute;
+      overflow: hidden;
+      width: 100%;
+      height: 100%;
+      -webkit-backface-visibility: hidden; /* Safari */
+      backface-visibility: hidden;
+
+      img {
+        width: 100%;
+        user-select: none;
+      }
+    }
+  }
+}
+
+@mixin left {
+  // TODO: make a hove tilt
+  // $tiltAngle: 15deg;
+
+  &__page {
+    left: 50%;
+    transform: rotateY(0deg);
+    transform-origin: 0 100%;
+    transition: transform 0.8s;
+
+    &--flipped {
+      transform: rotateY(-180deg);
+    }
+
+    &--back {
+      transform: rotateY(180deg);
+    }
+
+    &--blank {
+      background-color: #fff;
+    }
+  }
+}
+
+// TODO: add specific mixins to rotate page in different directions
+

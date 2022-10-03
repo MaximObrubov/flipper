@@ -1,12 +1,14 @@
-import json from '@rollup/plugin-json';
 import typescript from '@rollup/plugin-typescript';
+import json from '@rollup/plugin-json';
+import styles from "rollup-plugin-styles";
 import { terser } from 'rollup-plugin-terser';
+
 
 export default {
   input: 'src/main.ts',
   output: [
     // {
-    //   file: 'dist/bundle.js',
+    //   file: 'dist/flipper.cjs.js',
     //   sourcemap: true,
     //   format: 'cjs'
     // },
@@ -18,5 +20,9 @@ export default {
       plugins: [terser()]
     }
   ],
-  plugins: [typescript(), json()]
+  plugins: [
+    typescript(),
+    json(),
+    styles(),
+  ]
 };
