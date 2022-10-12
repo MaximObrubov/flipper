@@ -7,39 +7,46 @@ interface FlipperPageSites {
 
 export class FlipperPage implements FlipperPageInterface {
 
+  public id: number;
   public width: number;
   public height: number;
   public pageNode: HTMLDivElement;
-  public cssKlasses: {[key: string]: string};
   public flipped: boolean = false;
 
   private sites: FlipperPageSites = { front: null, back: null};
+  private _isProcessing = false;
   private options: FlipperPageSetting;
   private _zIndex: number;
+  private _onTop: boolean = false;
 
   constructor(
+    id: number,
     parent: HTMLElement,
     content: string | {front: string, back: string},
     options: FlipperPageSetting
   ) {
     if (!options.klass) throw new Error("CSS class should be passed to page component");
     this.options = options;
-
-    this.cssKlasses = {
-      flipped: `${options.klass}--flipped`,
-      front: `${options.klass}--front`,
-      back: `${options.klass}--back`,
-      blank: `${options.klass}--blank`,
-      // TODO: don't interact transition rotate with hover
-      // transitioning: `${options.klass}--transitioning`,
-    };
-
+    this.id = id;
     this.pageNode = this.createNode(this.options);
     this.pageNode.classList.add(options.klass);
+    if (options.shadow) this.pageNode.classList.add(this.cssKlasses.shadowed);
+    this.addSubscriptions();
     this.addContent(content);
-    // TODO: exclude hovers while flip transition
-    // this.sanitizeTransitions();
     parent.appendChild(this.pageNode);
+  }
+
+  get cssKlasses(): {[key: string]: string} {
+    return {
+      flipped: `${this.options.klass}--flipped`,
+      front: `${this.options.klass}--front`,
+      back: `${this.options.klass}--back`,
+      blank: `${this.options.klass}--blank`,
+      processing: `${this.options.klass}--processing`,
+      shadowed: `${this.options.klass}--shadowed`,
+      top: `${this.options.klass}--top`,
+      hover: "hover",
+    }
   }
 
   set zIndex(value: number) {
@@ -51,12 +58,57 @@ export class FlipperPage implements FlipperPageInterface {
     return this._zIndex;
   }
 
-  public flip() {
+  set isProcessing(value: boolean) {
+    this._isProcessing = value;
+    value
+      ? this.pageNode.classList.add(this.cssKlasses.processing)
+      : this.pageNode.classList.remove(this.cssKlasses.processing);
+  }
+
+  get isProcessing() {
+    return this._isProcessing;
+  }
+
+  set onTop(value: boolean) {
+    this._onTop = value;
+    this.pageNode.classList.toggle(this.cssKlasses.top, value);
+  }
+
+  get onTop(): boolean {
+    return this._onTop;
+  }
+
+  public flip(callback?: () => void) {
+    this.clearHover();
+    const removeProzessingKlass = (event: TransitionEvent) => {
+      if (event.propertyName !== "transform") return;
+      this.isProcessing = false;
+      this.pageNode.removeEventListener("transitionend", removeProzessingKlass);
+      if (typeof callback === "function") callback();
+    }
+    this.isProcessing = true;
+    this.pageNode.addEventListener("transitionend", removeProzessingKlass);
     this.pageNode.classList.toggle(this.cssKlasses.flipped);
     this.flipped = !this.flipped;
   }
 
-  public subscribe(event: string, callback: () => void) {
+  private onMouseEnter() {
+    if (this.isProcessing || !this.onTop) return;
+    this.pageNode.classList.add(this.cssKlasses.hover)
+  }
+
+  private onMouseLeave() {
+    if (this.isProcessing) return;
+    this.clearHover();
+  }
+
+  private clearHover() {
+    if (this.pageNode.classList.contains(this.cssKlasses.hover)) {
+      this.pageNode.classList.remove(this.cssKlasses.hover)
+    }
+  }
+
+  public subscribe(event: string, callback: (event: Event) => void) {
     this.pageNode.addEventListener(event, callback)
   }
 
@@ -96,24 +148,19 @@ export class FlipperPage implements FlipperPageInterface {
     this.pageNode.appendChild(this.sites.back);
   }
 
-
   private fillNode(parent: HTMLDivElement, content: string) {
     this.isLink(content)
       ? this.addImage(parent, content)
       : parent.innerHTML = content;
   }
 
-  private isLink(str: string): boolean {
-    return /^https?:\/\//.test(str);
+  private addSubscriptions() {
+    if (this.options.hover) this.subscribe("mouseenter", this.onMouseEnter.bind(this));
+    if (this.options.hover) this.subscribe("mouseleave", this.onMouseLeave.bind(this));
   }
 
-  private sanitizeTransitions() {
-    this.pageNode.addEventListener("transitionstart", () => {
-      this.pageNode.classList.add(this.cssKlasses.transitioning);
-    });
-    this.pageNode.addEventListener("transitionend", () => {
-      this.pageNode.classList.remove(this.cssKlasses.transitioning);
-    })
+  private isLink(str: string): boolean {
+    return /^https?:\/\//.test(str);
   }
 
 }

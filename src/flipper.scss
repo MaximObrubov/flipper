@@ -1,21 +1,23 @@
 @use './components/page.scss' as page;
+@use './components/page/direction-left.scss' as left;
+@use './components/page/direction-up.scss' as up;
 @import './scss/variables';
 
 $base_klass: "flipper";
+$transitionTime: 0.8s;
+$padding: 0em;
 
 .#{$base_klass} {
   position: relative;
-  padding: 1em;
+  padding: $padding;
   font-size: var(--flipper-font-size);
   color: var(--flipper-font-color);
-  perspective: 3000px;
-
-  // TODO: temporary added; remove it
-  background-color: white;
-  // overflow: hidden;
+  perspective: 4000px;
 
   @include page.common;
-
-  // TODO: add conditions to different rotation direction
-  @include page.left;
+  @include left.rotation($base_klass, $padding, $transitionTime);
+  @include up.rotation($base_klass, $padding, $transitionTime);
 }
+
+
+

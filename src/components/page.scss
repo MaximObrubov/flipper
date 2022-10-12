@@ -32,29 +32,3 @@
   }
 }
 
-@mixin left {
-  // TODO: make a hove tilt
-  // $tiltAngle: 15deg;
-
-  &__page {
-    left: 50%;
-    transform: rotateY(0deg);
-    transform-origin: 0 100%;
-    transition: transform 0.8s;
-
-    &--flipped {
-      transform: rotateY(-180deg);
-    }
-
-    &--back {
-      transform: rotateY(180deg);
-    }
-
-    &--blank {
-      background-color: #fff;
-    }
-  }
-}
-
-// TODO: add specific mixins to rotate page in different directions
-

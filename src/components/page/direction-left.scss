@@ -1,0 +1,96 @@
+@mixin rotation($base_klass, $padding, $transitionTime) {
+  $tiltAngle: 25deg;
+
+  &--direction-left {
+    transition: width $transitionTime;
+
+    .#{$base_klass}__page {
+      left: 50%;
+      transform: rotateY(0deg);
+      transform-origin: 0 100%;
+      transition: transform $transitionTime, left $transitionTime;
+
+      &--shadowed {
+        &::before {
+          content: "";
+          display: block;
+          position: absolute;
+          top: 0;left: 0;
+          width: 100%;
+          height: 100%;
+          // background: rgba(0, 0, 0, 0);
+          background: linear-gradient(to left, transparent, black);
+          z-index: 1;
+          opacity: 0;
+          transition: opacity $transitionTime;
+        }
+        &::after {
+          content: "";
+          display: block;
+          position: absolute;
+          top: 0;left: 0;
+          width: 100%;
+          height: 100%;
+          background: rgba(0, 0, 0, 0.15);
+          z-index: 1;
+          opacity: 0;
+          transition: opacity $transitionTime;
+        }
+      }
+
+      &.hover {
+        transform: rotateY(-$tiltAngle);
+        &::before {
+          opacity: 0.3;
+        }
+      }
+
+      &:not(.#{$base_klass}__page--top) {
+        &::after { opacity: 1; }
+      }
+
+      &--processing {
+        pointer-events: none;
+      }
+
+      &--flipped {
+        transform: rotateY(-180deg);
+        &.hover {
+          transform: rotateY(-180deg + $tiltAngle);
+        }
+      }
+
+      &--back {
+        transform: rotateY(180deg);
+      }
+
+      &--blank {
+        background-color: #fff;
+      }
+    }
+
+    &.#{$base_klass}--fill-single {
+      overflow-x: clip;
+      overflow-y: visible;
+
+      .#{$base_klass}__page {
+        left: 10%;
+      }
+    }
+
+    &.#{$base_klass}--closed {
+      .#{$base_klass}__page {
+        // background-color: red;
+        left: $padding;
+      }
+    }
+
+    &.#{$base_klass}--closed.#{$base_klass}--flipped {
+      .#{$base_klass}__page {
+        // background-color: red;
+        left: calc(100% - $padding);
+      }
+    }
+  }
+}
+

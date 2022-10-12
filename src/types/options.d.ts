@@ -5,9 +5,13 @@ export interface FlipperPageSetting {
   klass: string,
   width: string,
   height: string,
+  shadow: boolean,
+  hover?: boolean,
   src?: string,
   html?: string,
 }
+
+export type Direction = "up" | "left"
 
 /**
  * Descripes Common options for fliper instance
@@ -15,10 +19,11 @@ export interface FlipperPageSetting {
 export interface FlipperOptionsInterface {
   pages: Array<string>,
   fill: "both" | "single",
-  // TODO: make directions
-  direction: "up" | "right" | "down" | "left",
+  direction: Direction,
   page: {
     width: string,
-    heigth: string,
+    height: string,
+    shadow: boolean,
+    hover: boolean,
   }
 }

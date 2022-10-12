@@ -1,5 +1,5 @@
 import { FlipperPage } from "./components/page.class";
-import { FlipperOptionsInterface } from "./types/options";
+import { Direction, FlipperOptionsInterface } from "./types/options";
 import "./flipper.scss";
 
 export class Flipper {
@@ -13,7 +13,9 @@ export class Flipper {
     fill: "both",
     page: {
       width: "30em",
-      heigth: "30em",
+      height: "30em",
+      shadow: true,
+      hover: true,
     }
   };
 
@@ -40,33 +42,39 @@ export class Flipper {
 
   init() {
     this.root.classList.add(this.BASE_KLASS);
+    this.root.classList.add(`${this.BASE_KLASS}--direction-${this.options.direction}`);
+    this.root.classList.add(`${this.BASE_KLASS}--fill-${this.options.fill}`);
     this.adjustRoot();
     this.createPages();
   }
 
   private createPages() {
-    // TODO: check if node not empty;
-    // if node already contains elements with PAGE_KLASS then ignore initialization from source
-    // show allert in console when the options ignored
-    const source = this.composeContent();
+    const HTMLPages = this.root.querySelectorAll(`.${this.PAGE_KLASS}`);
+    const pageNodes = Array.from(HTMLPages).map(p => p.innerHTML);
+    // NOTE: if inside root node there is a prepared html page nodes, then initiate flipper from HTMTL
+    //       if no prepared HTML nodes inside the root node, then build content from options
+    const source = this.composeContent(pageNodes.length ? pageNodes : this.options.pages);
+    if (pageNodes.length) this.root.innerHTML = "";
+
     this.pages = source.reverse().map((pSrc: string, index: number): FlipperPage => {
-      const page = new FlipperPage(this.root, pSrc, {
+      const page = new FlipperPage(index, this.root, pSrc, {
         klass: this.PAGE_KLASS,
         width: this.options.page.width,
-        height: this.options.page.heigth,
+        height: this.options.page.height,
+        shadow: this.options.page.shadow,
+        hover: this.options.page.hover,
       });
-      // page.zIndex = index + 1;
       page.subscribe("click", this.flipPage.bind(this, page));
       this.piles.initial.push(page);
-      // if (page.zIndex > this.maxZIndex) this.maxZIndex = page.zIndex;
       return page;
     });
+
+    this.checkPiles();
   }
 
   private flipPage(page: FlipperPage) {
-    if (page.flipped && page !== this.piles.flipped.slice(-1)[0]) return;
-    if (!page.flipped && page !== this.piles.initial.slice(-1)[0]) return;
-
+    if (!this.isTheTopOfThePile(page)) return;
+    if (page === this.piles.initial[0] && this.options.fill === "single") return;
     page.flip();
     page.zIndex = this.maxZIndex + 1;
     this.maxZIndex = page.zIndex;
@@ -78,13 +86,13 @@ export class Flipper {
       this.piles.initial.push(page)
       this.piles.flipped.pop();
     }
+    this.checkPiles();
   }
 
-  private composeContent() {
-    if (this.options.fill === "single") return this.options.pages;
-    // NOTE: both fill case
+  private composeContent(pagesSource: Array<any>) {
+    if (this.options.fill === "single") return pagesSource;
     let lastPage: { front: string, back: string } = {front: null, back: null};
-    const pages = this.options.pages.reduce((pages, content, i) => {
+    const pages = pagesSource.reduce((pages, content, i) => {
       if (i % 2 == 0) {
         lastPage.front = content;
       } else {
@@ -97,13 +105,63 @@ export class Flipper {
     return pages;
   }
 
-  private adjustRoot() {
-    // NOTE: should be corelated with direction options
-    // for "left" direction, main node should have double width
-    this.root.style.width = this.options.page.width.replace(/^(\d+)(.+)$/, (_, val, unit) => {
-      return parseInt(val) * 2 + unit;
+  /**
+   * If page is not on the top of the flipped or initian piles then it should stay intact
+   * @param page - FlipperPage to be checked
+   */
+  private isTheTopOfThePile(page: FlipperPage) {
+    if (page.flipped && page == this.piles.flipped.slice(-1)[0]) return true;
+    if (!page.flipped && page == this.piles.initial.slice(-1)[0]) return true;
+    return false;
+  }
+
+  private resetPileTops() {
+    this.pages.forEach(p => { p.onTop = this.isTheTopOfThePile(p); });
+  }
+
+  private checkPiles() {
+    const closedKlass = this.BASE_KLASS + "--closed";
+    const flippedKlass = this.BASE_KLASS + "--flipped";
+
+    this.resetPileTops();
+
+    if (!this.piles.flipped.length) {
+      this.root.classList.add(closedKlass);
+      this.adjustRoot(true);
+      this.resetZIndex(true);
+    } else if (!this.piles.initial.length) {
+      this.root.classList.add(closedKlass);
+      this.root.classList.add(flippedKlass);
+      this.adjustRoot(true);
+      this.resetZIndex(false);
+    } else {
+      this.root.classList.remove(flippedKlass);
+      this.root.classList.remove(closedKlass);
+      this.adjustRoot();
+    }
+  }
+
+  private resetZIndex(reverse: boolean) {
+    const len = this.pages.length;
+    this.pages.forEach((p, i) => p.zIndex = reverse ? i + 1 : len - i);
+    this.maxZIndex = len;
+  }
+
+  private adjustRoot(closed = false) {
+    const double = (val: string) => val.replace(/^(\d+)(.+)$/, (_, val, unit) => {
+      return parseInt(val) * (this.options.fill === "both" ? 2 : 1.1) + unit;
     });
-    this.root.style.height = this.options.page.heigth;
+    const direction: {[key in Direction]: () => void} = {
+      left: () => {
+        this.root.style.width = closed ? this.options.page.width : double(this.options.page.width);
+        this.root.style.height = this.options.page.height;
+      },
+      up: () => {
+        this.root.style.height = closed ? this.options.page.height : double(this.options.page.height);
+        this.root.style.width = this.options.page.width;
+      }
+    }
+    direction[this.options.direction]();
   }
 
 }
