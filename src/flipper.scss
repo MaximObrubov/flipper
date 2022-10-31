@@ -4,7 +4,6 @@
 @import './scss/variables';
 
 $base_klass: "flipper";
-$transitionTime: 0.8s;
 $padding: 0em;
 
 .#{$base_klass} {
@@ -15,8 +14,8 @@ $padding: 0em;
   perspective: 4000px;
 
   @include page.common;
-  @include left.rotation($base_klass, $padding, $transitionTime);
-  @include up.rotation($base_klass, $padding, $transitionTime);
+  @include left.rotation($base_klass, $padding);
+  @include up.rotation($base_klass, $padding);
 }
 
 

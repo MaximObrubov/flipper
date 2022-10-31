@@ -4,13 +4,13 @@ import "./flipper.scss";
 
 export class Flipper {
 
-
   BASE_KLASS = "flipper";
 
   DEFAULT: FlipperOptionsInterface = {
     pages: [],
     direction: "left",
     fill: "both",
+    time: 800,
     page: {
       width: "30em",
       height: "30em",
@@ -35,6 +35,8 @@ export class Flipper {
   // TODO: ugly logic with maxZid, remaster it
   private maxZIndex = 0;
 
+  private bounceTimeout: number | undefined;
+
   constructor(node: HTMLDivElement, options: FlipperOptionsInterface) {
     this.options = { ...this.DEFAULT, ...options }
     this.root = node;
@@ -44,8 +46,9 @@ export class Flipper {
     this.root.classList.add(this.BASE_KLASS);
     this.root.classList.add(`${this.BASE_KLASS}--direction-${this.options.direction}`);
     this.root.classList.add(`${this.BASE_KLASS}--fill-${this.options.fill}`);
-    this.adjustRoot();
     this.createPages();
+    this.root.style.transitionDuration = this.options.time + 'ms';
+    setTimeout(() => this.pages.forEach(page => page.transitionSwitcher()));
   }
 
   private createPages() {
@@ -62,14 +65,30 @@ export class Flipper {
         width: this.options.page.width,
         height: this.options.page.height,
         shadow: this.options.page.shadow,
+        duration: this.options.time,
+        direction: this.options.direction,
         hover: this.options.page.hover,
       });
-      page.subscribe("click", this.flipPage.bind(this, page));
+      // page.subscribe("click", this.flipPage.bind(this, page));
+      page.subscribe("click", this.onPageClick.bind(this, page));
+      page.subscribe("draggable:end", this.onPageDragEnd.bind(this, page));
       this.piles.initial.push(page);
       return page;
     });
 
     this.checkPiles();
+  }
+
+  private onPageClick(page: FlipperPage, e: MouseEvent) {
+    if (this.bounceTimeout) return;
+    this.flipPage.call(this, page);
+    this.bounceTimeout = window.setTimeout(() => {
+      this.bounceTimeout = undefined;
+    }, this.options.time / 2);
+  }
+
+  private onPageDragEnd(page: FlipperPage) {
+    if ((page.flipped ? -1 : 1) * page.getAngle() >  90) this.flipPage(page);
   }
 
   private flipPage(page: FlipperPage) {
@@ -102,6 +121,7 @@ export class Flipper {
       }
       return pages;
     }, []);
+    if (lastPage.front) pages.push(lastPage);
     return pages;
   }
 

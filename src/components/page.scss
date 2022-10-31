@@ -11,8 +11,9 @@
     perspective: 500px;
     user-select: none;
     cursor: pointer;
+    -webkit-tap-highlight-color: transparent;
 
-    &--transitioning {
+    &--processing {
       pointer-events: none;
     }
 

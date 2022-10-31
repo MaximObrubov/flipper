@@ -1,16 +1,16 @@
 import { FlipperPageInterface } from "../types/page";
 import { FlipperPageSetting } from "../types/options";
+import { Draggable } from "./draggable.class";
 
 interface FlipperPageSites {
   front: HTMLDivElement, back: HTMLDivElement
 }
 
-export class FlipperPage implements FlipperPageInterface {
+export class FlipperPage extends Draggable implements FlipperPageInterface {
 
   public id: number;
   public width: number;
   public height: number;
-  public pageNode: HTMLDivElement;
   public flipped: boolean = false;
 
   private sites: FlipperPageSites = { front: null, back: null};
@@ -25,15 +25,19 @@ export class FlipperPage implements FlipperPageInterface {
     content: string | {front: string, back: string},
     options: FlipperPageSetting
   ) {
+    super();
     if (!options.klass) throw new Error("CSS class should be passed to page component");
     this.options = options;
     this.id = id;
-    this.pageNode = this.createNode(this.options);
-    this.pageNode.classList.add(options.klass);
-    if (options.shadow) this.pageNode.classList.add(this.cssKlasses.shadowed);
+    this.HTMLNode = this.createNode(this.options);
+    this.HTMLNode.classList.add(options.klass);
+    if (options.shadow) this.HTMLNode.classList.add(this.cssKlasses.shadowed);
     this.addSubscriptions();
     this.addContent(content);
-    parent.appendChild(this.pageNode);
+    parent.appendChild(this.HTMLNode);
+    // this.transitionSwitcher();
+    this.width = this.HTMLNode.clientWidth;
+    this.height = this.HTMLNode.clientHeight;
   }
 
   get cssKlasses(): {[key: string]: string} {
@@ -51,7 +55,7 @@ export class FlipperPage implements FlipperPageInterface {
 
   set zIndex(value: number) {
     this._zIndex = value;
-    this.pageNode.style.zIndex = this._zIndex + '';
+    this.HTMLNode.style.zIndex = this._zIndex + '';
   }
 
   get zIndex() {
@@ -61,8 +65,8 @@ export class FlipperPage implements FlipperPageInterface {
   set isProcessing(value: boolean) {
     this._isProcessing = value;
     value
-      ? this.pageNode.classList.add(this.cssKlasses.processing)
-      : this.pageNode.classList.remove(this.cssKlasses.processing);
+      ? this.HTMLNode.classList.add(this.cssKlasses.processing)
+      : this.HTMLNode.classList.remove(this.cssKlasses.processing);
   }
 
   get isProcessing() {
@@ -71,7 +75,7 @@ export class FlipperPage implements FlipperPageInterface {
 
   set onTop(value: boolean) {
     this._onTop = value;
-    this.pageNode.classList.toggle(this.cssKlasses.top, value);
+    this.HTMLNode.classList.toggle(this.cssKlasses.top, value);
   }
 
   get onTop(): boolean {
@@ -80,21 +84,73 @@ export class FlipperPage implements FlipperPageInterface {
 
   public flip(callback?: () => void) {
     this.clearHover();
-    const removeProzessingKlass = (event: TransitionEvent) => {
-      if (event.propertyName !== "transform") return;
-      this.isProcessing = false;
-      this.pageNode.removeEventListener("transitionend", removeProzessingKlass);
-      if (typeof callback === "function") callback();
-    }
-    this.isProcessing = true;
-    this.pageNode.addEventListener("transitionend", removeProzessingKlass);
-    this.pageNode.classList.toggle(this.cssKlasses.flipped);
+    this.beforeTransition(callback);
+    this.HTMLNode.classList.toggle(this.cssKlasses.flipped);
     this.flipped = !this.flipped;
+  }
+
+  public onDragStart(event: PointerEvent) {
+    this.transitionSwitcher(false);
+  }
+
+  public onDragMove(event: PointerEvent) {
+    super.onDragMove(event);
+
+    let angle = this.getAngle();
+    const rotor = {
+      up: `rotateX(${this.flipped ? 180 + angle : angle}deg)`,
+      left: `rotateY(${this.flipped ? - 180 - angle : -1 * angle}deg)`,
+    };
+    this.HTMLNode.style.transform = rotor[this.options.direction];
+  }
+
+  public onDragEnd(event: PointerEvent) {
+    this.transitionSwitcher(true);
+
+    console.log(this.getAngle(), this.coordinates)
+
+    if (this.getAngle()) {
+      this.beforeTransition();
+    } else {
+      if (!this.coordDiff(this.options.direction)) this.HTMLNode.dispatchEvent(new Event("click"));
+    }
+  }
+
+  public getAngle(): number {
+    let angle = this.options.direction === "left"
+      ? this._getAngle(this.width, "x")
+      : this._getAngle(this.height, "y");
+    if (!this.flipped) {
+      if (angle < 1) angle = 1;
+      if (angle > 179) angle = 179;
+    } else {
+      if (angle > 1) angle = 1;
+      if (angle < -179) angle = -179;
+    }
+    return angle;
+  }
+
+  public transitionSwitcher(switchKey = true) {
+    this.applyStyles({
+      transform: "",
+      transitionDuration: switchKey ? this.options.duration + 'ms' : '',
+    });
+  }
+
+  /**
+   * if one end of radius is fixed, then X or Y difference
+   * between start drag position and current will allow us to calculate and angle diff
+   * @param   radius  radius to be rotated
+   * @param   dir     needed direction of rotation
+   * @return  provides an angle in grad
+   */
+  private _getAngle(radius: number, dir: "x" | "y"): number {
+    return 90 * (this.coordinates.start[dir] - this.coordinates.current[dir]) / radius;
   }
 
   private onMouseEnter() {
     if (this.isProcessing || !this.onTop) return;
-    this.pageNode.classList.add(this.cssKlasses.hover)
+    this.HTMLNode.classList.add(this.cssKlasses.hover)
   }
 
   private onMouseLeave() {
@@ -103,13 +159,21 @@ export class FlipperPage implements FlipperPageInterface {
   }
 
   private clearHover() {
-    if (this.pageNode.classList.contains(this.cssKlasses.hover)) {
-      this.pageNode.classList.remove(this.cssKlasses.hover)
+    if (this.HTMLNode.classList.contains(this.cssKlasses.hover)) {
+      this.HTMLNode.classList.remove(this.cssKlasses.hover)
     }
   }
 
-  public subscribe(event: string, callback: (event: Event) => void) {
-    this.pageNode.addEventListener(event, callback)
+  private beforeTransition(callback?: () => void) {
+    const removeProzessingKlass = (event: TransitionEvent) => {
+      if (event.propertyName !== "transform") return;
+      this.isProcessing = false;
+      this.HTMLNode.removeEventListener("transitionend", removeProzessingKlass);
+      this.resetCoordinates();
+      if (typeof callback === "function") callback();
+    }
+    this.isProcessing = true;
+    this.subscribe("transitionend", removeProzessingKlass);
   }
 
   private createNode(options: FlipperPageSetting): HTMLDivElement {
@@ -125,7 +189,6 @@ export class FlipperPage implements FlipperPageInterface {
 
   private generateImageNode(src: string) {
     const imageNode = document.createElement("img");
-    // image.alt = "-- image loading broken --";
     imageNode.src = src;
     return imageNode;
   }
@@ -144,8 +207,8 @@ export class FlipperPage implements FlipperPageInterface {
       this.sites.back.classList.add(this.cssKlasses.blank);
     }
 
-    this.pageNode.appendChild(this.sites.front);
-    this.pageNode.appendChild(this.sites.back);
+    this.HTMLNode.appendChild(this.sites.front);
+    this.HTMLNode.appendChild(this.sites.back);
   }
 
   private fillNode(parent: HTMLDivElement, content: string) {
@@ -157,10 +220,15 @@ export class FlipperPage implements FlipperPageInterface {
   private addSubscriptions() {
     if (this.options.hover) this.subscribe("mouseenter", this.onMouseEnter.bind(this));
     if (this.options.hover) this.subscribe("mouseleave", this.onMouseLeave.bind(this));
+    super.subscribeDrag();
   }
 
   private isLink(str: string): boolean {
     return /^https?:\/\//.test(str);
+  }
+
+  private applyStyles(styles: {[key: string]: any}) {
+    Object.assign(this.HTMLNode.style, styles);
   }
 
 }

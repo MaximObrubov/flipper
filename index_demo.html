@@ -1,0 +1,129 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <link rel="icon" type="image/x-icon" href="./Download.png">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Montserrat:ital,wght@0,200;0,300;0,400;0,500;1,200;1,300;1,400;1,700&display=swap" rel="stylesheet">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Flipper Demo</title>
+
+
+  <style>
+
+    body {
+      background-color: #efefef;
+      font-family: 'Montserrat', sans-serif;
+    }
+
+    .container {
+      display: inline-block;
+    }
+
+    .container.not-filled {
+    }
+
+    hr {
+      border-width: 4px;
+      margin-bottom: 1.5em;
+    }
+  </style>
+</head>
+<body>
+  <div style="width: 1024px; margin: 0 auto; text-align: center;">
+    <div class="container container1" style="margin-right: 2em;"></div>
+    <div class="container container2" style="margin-right: 2em;"></div>
+
+    <hr>
+
+    <div class="container container3" style="margin-right: 1em; vertical-align: top;">
+      <div class="flipper__page">
+        <div style="padding: 1.5em; font-size: 10px;">
+          <h1>Page 1</h1>
+          <h3>Nothing interesting on page 1</h3>
+          <p>Lorem ipsum dolor sit amet consectetur adipisicing elit. Dignissimos beatae maxime quam harum nisi dolorem totam quas rem. Odio amet doloremque dolores, debitis et repellendus natus beatae ut itaque dolore!</p>
+          <img style="width: 46%; height: auto; font-size: 0; vertical-align: top; display: inline-block;" src="https://cataas.com/cat" alt="">
+          <img style="width: 46%; height: auto; font-size: 0; vertical-align: top; display: inline-block;" src="https://cataas.com/cat?t=1" alt="">
+        </div>
+      </div>
+      <div class="flipper__page">
+        <div style="padding: 1.5em;">
+          <h1>Page 2</h1>
+          <p>Lorem ipsum dolor sit amet consectetur adipisicing elit. Dignissimos beatae maxime quam harum nisi dolorem totam quas rem. Odio amet doloremque dolores, debitis et repellendus natus beatae ut itaque dolore!</p>
+        </div>
+      </div>
+      <div class="flipper__page">
+        <div style="padding: 1.5em;">
+          <h1>Page 3</h1>
+          <img style="vertical-align: top; display: inline-block;" src="https://cataas.com/cat?t=1" alt="">
+        </div>
+      </div>
+      <!-- <div class="flipper__page">
+        <div style="padding: 1.5em;">
+          <h1>Page 4</h1>
+          <p>Lorem ipsum dolor sit amet consectetur adipisicing elit. Dignissimos beatae maxime quam harum nisi dolorem totam quas rem. Odio amet doloremque dolores, debitis et repellendus natus beatae ut itaque dolore!</p>
+        </div>
+      </div> -->
+    </div>
+
+    <div class="container container4">
+    </div>
+
+
+  </div>
+
+
+  <script type="text/javascript">
+    var Flipper=function(){"use strict";var t=function(e,i){return t=Object.setPrototypeOf||{__proto__:[]}instanceof Array&&function(t,e){t.__proto__=e}||function(t,e){for(var i in e)Object.prototype.hasOwnProperty.call(e,i)&&(t[i]=e[i])},t(e,i)};var e=function(){return e=Object.assign||function(t){for(var e,i=1,n=arguments.length;i<n;i++)for(var o in e=arguments[i])Object.prototype.hasOwnProperty.call(e,o)&&(t[o]=e[o]);return t},e.apply(this,arguments)},i=function(e){function i(t,i,n,o){var r=e.call(this)||this;if(r.flipped=!1,r.sites={front:null,back:null},r._isProcessing=!1,r._onTop=!1,!o.klass)throw new Error("CSS class should be passed to page component");return r.options=o,r.id=t,r.HTMLNode=r.createNode(r.options),r.HTMLNode.classList.add(o.klass),o.shadow&&r.HTMLNode.classList.add(r.cssKlasses.shadowed),r.addSubscriptions(),r.addContent(n),i.appendChild(r.HTMLNode),r.width=r.HTMLNode.clientWidth,r.height=r.HTMLNode.clientHeight,r}return function(e,i){if("function"!=typeof i&&null!==i)throw new TypeError("Class extends value "+String(i)+" is not a constructor or null");function n(){this.constructor=e}t(e,i),e.prototype=null===i?Object.create(i):(n.prototype=i.prototype,new n)}(i,e),Object.defineProperty(i.prototype,"cssKlasses",{get:function(){return{flipped:"".concat(this.options.klass,"--flipped"),front:"".concat(this.options.klass,"--front"),back:"".concat(this.options.klass,"--back"),blank:"".concat(this.options.klass,"--blank"),processing:"".concat(this.options.klass,"--processing"),shadowed:"".concat(this.options.klass,"--shadowed"),top:"".concat(this.options.klass,"--top"),hover:"hover"}},enumerable:!1,configurable:!0}),Object.defineProperty(i.prototype,"zIndex",{get:function(){return this._zIndex},set:function(t){this._zIndex=t,this.HTMLNode.style.zIndex=this._zIndex+""},enumerable:!1,configurable:!0}),Object.defineProperty(i.prototype,"isProcessing",{get:function(){return this._isProcessing},set:function(t){this._isProcessing=t,t?this.HTMLNode.classList.add(this.cssKlasses.processing):this.HTMLNode.classList.remove(this.cssKlasses.processing)},enumerable:!1,configurable:!0}),Object.defineProperty(i.prototype,"onTop",{get:function(){return this._onTop},set:function(t){this._onTop=t,this.HTMLNode.classList.toggle(this.cssKlasses.top,t)},enumerable:!1,configurable:!0}),i.prototype.flip=function(t){this.clearHover(),this.beforeTransition(t),this.HTMLNode.classList.toggle(this.cssKlasses.flipped),this.flipped=!this.flipped},i.prototype.onDragStart=function(t){this.transitionSwitcher(!1)},i.prototype.onDragMove=function(t){e.prototype.onDragMove.call(this,t);var i=this.getAngle(),n={up:"rotateX(".concat(this.flipped?180+i:i,"deg)"),left:"rotateY(".concat(this.flipped?-180-i:-1*i,"deg)")};this.HTMLNode.style.transform=n[this.options.direction]},i.prototype.onDragEnd=function(t){this.transitionSwitcher(!0),console.log(this.getAngle(),this.coordinates),this.getAngle()?this.beforeTransition():this.coordDiff(this.options.direction)||this.HTMLNode.dispatchEvent(new Event("click"))},i.prototype.getAngle=function(){var t="left"===this.options.direction?this._getAngle(this.width,"x"):this._getAngle(this.height,"y");return this.flipped?(t>0&&(t=0),t<-180&&(t=-180)):(t<0&&(t=0),t>180&&(t=180)),t},i.prototype.transitionSwitcher=function(t){void 0===t&&(t=!0),this.applyStyles({transform:"",transitionDuration:t?this.options.duration+"ms":""})},i.prototype._getAngle=function(t,e){return 90*(this.coordinates.start[e]-this.coordinates.current[e])/t},i.prototype.onMouseEnter=function(){!this.isProcessing&&this.onTop&&this.HTMLNode.classList.add(this.cssKlasses.hover)},i.prototype.onMouseLeave=function(){this.isProcessing||this.clearHover()},i.prototype.clearHover=function(){this.HTMLNode.classList.contains(this.cssKlasses.hover)&&this.HTMLNode.classList.remove(this.cssKlasses.hover)},i.prototype.beforeTransition=function(t){var e=this,i=function(n){"transform"===n.propertyName&&(e.isProcessing=!1,e.HTMLNode.removeEventListener("transitionend",i),e.resetCoordinates(),"function"==typeof t&&t())};this.isProcessing=!0,this.subscribe("transitionend",i)},i.prototype.createNode=function(t){var e=document.createElement("div");return e.style.height=t.height,e.style.width=t.width,e},i.prototype.addImage=function(t,e){t.appendChild(this.generateImageNode(e))},i.prototype.generateImageNode=function(t){var e=document.createElement("img");return e.src=t,e},i.prototype.addContent=function(t){this.sites.front=this.createNode(this.options),this.sites.back=this.createNode(this.options),this.sites.front.classList.add(this.cssKlasses.front),this.sites.back.classList.add(this.cssKlasses.back),"object"==typeof t?(this.fillNode(this.sites.front,t.front),this.fillNode(this.sites.back,t.back)):(this.fillNode(this.sites.front,t),this.sites.back.classList.add(this.cssKlasses.blank)),this.HTMLNode.appendChild(this.sites.front),this.HTMLNode.appendChild(this.sites.back)},i.prototype.fillNode=function(t,e){this.isLink(e)?this.addImage(t,e):t.innerHTML=e},i.prototype.addSubscriptions=function(){this.options.hover&&this.subscribe("mouseenter",this.onMouseEnter.bind(this)),this.options.hover&&this.subscribe("mouseleave",this.onMouseLeave.bind(this)),e.prototype.subscribeDrag.call(this)},i.prototype.isLink=function(t){return/^https?:\/\//.test(t)},i.prototype.applyStyles=function(t){Object.assign(this.HTMLNode.style,t)},i}(function(){function t(){this.THROTTLE_PERIOD=3,this.DRAGGING_ZI=2967,this.coordinates={start:{x:0,y:0},current:{x:0,y:0}}}return Object.defineProperty(t.prototype,"HTMLNode",{get:function(){return this._HTMLNode},set:function(t){this._HTMLNode=t},enumerable:!1,configurable:!0}),t.prototype.subscribe=function(t,e){this.HTMLNode.addEventListener(t,e)},t.prototype.unsubscribe=function(t,e){this.HTMLNode.removeEventListener(t,e)},t.prototype.onDragStart=function(t){},t.prototype.onDragMove=function(t){},t.prototype.onDragEnd=function(t){},t.prototype.subscribeDrag=function(){this.subscribe("touchstart",this._onDragStart.bind(this))},t.prototype.triggerEvent=function(t){this.HTMLNode.dispatchEvent(new Event(t))},t.prototype.resetCoordinates=function(){this.coordinates={start:{x:0,y:0},current:{x:0,y:0}}},t.prototype.coordDiff=function(t){var e="left"===t?"x":"y";return this.coordinates.start[e]-this.coordinates.current[e]},t.prototype._onDragStart=function(t){var e=this;t.preventDefault(),t.stopPropagation(),this.resetCoordinates();var i=this.HTMLNode.style.zIndex;this.HTMLNode.style.zIndex=this.DRAGGING_ZI+"",this.onDragStart(t),this.triggerEvent("draggable:start");var n=this._onDragMove.bind(this),o=function(r){e.unsubscribe("touchmove",n),e.unsubscribe("touchend",o),clearTimeout(e.throttleTimeout),e.throttleTimeout=void 0,e.HTMLNode.style.zIndex=i,e.onDragEnd(t),e.triggerEvent("draggable:end")};this.subscribe("touchmove",n),this.subscribe("touchend",o)},t.prototype._onDragMove=function(t){var e=this;this.throttleTimeout||(this.throttleTimeout=window.setTimeout((function(){e.coordinates.start.x||e.coordinates.start.x||e.updateCoords(t,"start"),e.updateCoords(t),e.throttleTimeout=void 0,e.onDragMove(t)}),this.THROTTLE_PERIOD))},t.prototype.updateCoords=function(t,e){void 0===e&&(e="current");var i=t instanceof TouchEvent?t.touches[0]:t;this.coordinates[e]={x:i.clientX,y:i.clientY}},t}()),n=[],o=[];return function(t,e){if(t&&"undefined"!=typeof document){var i,r=!0===e.prepend?"prepend":"append",s=!0===e.singleTag,p="string"==typeof e.container?document.querySelector(e.container):document.getElementsByTagName("head")[0];if(s){var a=n.indexOf(p);-1===a&&(a=n.push(p)-1,o[a]={}),i=o[a]&&o[a][r]?o[a][r]:o[a][r]=l()}else i=l();65279===t.charCodeAt(0)&&(t=t.substring(1)),i.styleSheet?i.styleSheet.cssText+=t:i.appendChild(document.createTextNode(t))}function l(){var t=document.createElement("style");if(t.setAttribute("type","text/css"),e.attributes)for(var i=Object.keys(e.attributes),n=0;n<i.length;n++)t.setAttribute(i[n],e.attributes[i[n]]);var o="prepend"===r?"afterbegin":"beforeend";return p.insertAdjacentElement(o,t),t}}(':root {\n  --flipper-primary-color: #234;\n  --flipper-secondary-color: #eacd50;\n  --flipper-border-color: #999;\n  --flipper-page-bg: white;\n  --flipper-font-size: 15px;\n  --flipper-font-color: #333;\n}\n\n.flipper {\n  position: relative;\n  padding: 0em;\n  font-size: var(--flipper-font-size);\n  color: var(--flipper-font-color);\n  perspective: 4000px;\n}\n.flipper__page {\n  position: absolute;\n  width: 50%;\n  transition-timing-function: ease-in-out;\n  transform-origin: 0 100%;\n  background-color: var(--flipper-page-bg);\n  background-color: #fff;\n  transform-style: preserve-3d;\n  perspective: 500px;\n  user-select: none;\n  cursor: pointer;\n  -webkit-tap-highlight-color: transparent;\n}\n.flipper__page--processing {\n  pointer-events: none;\n}\n.flipper__page--front, .flipper__page--back {\n  position: absolute;\n  overflow: hidden;\n  width: 100%;\n  height: 100%;\n  -webkit-backface-visibility: hidden; /* Safari */\n  backface-visibility: hidden;\n}\n.flipper__page--front img, .flipper__page--back img {\n  width: 100%;\n  user-select: none;\n}\n.flipper--direction-left {\n  transition-property: width;\n}\n.flipper--direction-left .flipper__page {\n  left: 50%;\n  transform: rotateY(0deg);\n  transform-origin: 0 100%;\n  transition-property: transform, left;\n}\n.flipper--direction-left .flipper__page--shadowed::before, .flipper--direction-left .flipper__page--shadowed::after {\n  content: "";\n  display: block;\n  position: absolute;\n  top: 0;\n  left: 0;\n  width: 100%;\n  height: 100%;\n  z-index: 1;\n  opacity: 0;\n  transition-duration: inherit;\n  transition-property: opacity;\n}\n.flipper--direction-left .flipper__page--shadowed::before {\n  background: linear-gradient(to left, transparent, black);\n}\n.flipper--direction-left .flipper__page--shadowed::after {\n  background: rgba(0, 0, 0, 0.15);\n}\n.flipper--direction-left .flipper__page.hover {\n  transform: rotateY(-25deg);\n}\n.flipper--direction-left .flipper__page.hover::before {\n  opacity: 0.3;\n}\n.flipper--direction-left .flipper__page:not(.flipper__page--top) {\n  pointer-events: none;\n}\n.flipper--direction-left .flipper__page:not(.flipper__page--top)::after {\n  opacity: 1;\n}\n.flipper--direction-left .flipper__page--processing {\n  pointer-events: none;\n}\n.flipper--direction-left .flipper__page--flipped {\n  transform: rotateY(-180deg);\n}\n.flipper--direction-left .flipper__page--flipped.hover {\n  transform: rotateY(-155deg);\n}\n.flipper--direction-left .flipper__page--back {\n  transform: rotateY(180deg);\n}\n.flipper--direction-left .flipper__page--blank {\n  background-color: #fff;\n}\n.flipper--direction-left.flipper--fill-single {\n  overflow-x: clip;\n  overflow-y: visible;\n}\n.flipper--direction-left.flipper--fill-single .flipper__page {\n  left: 10%;\n}\n.flipper--direction-left.flipper--closed .flipper__page {\n  left: 0em;\n}\n.flipper--direction-left.flipper--closed.flipper--flipped .flipper__page {\n  left: calc(100% - 0em);\n}\n.flipper--direction-up {\n  transition-property: height;\n}\n.flipper--direction-up .flipper__page {\n  top: 50%;\n  transform: rotateX(0deg);\n  transform-origin: 100% 0;\n  transition-property: transform, top;\n}\n.flipper--direction-up .flipper__page--shadowed::before, .flipper--direction-up .flipper__page--shadowed::after {\n  content: "";\n  display: block;\n  position: absolute;\n  top: 0;\n  left: 0;\n  width: 100%;\n  height: 100%;\n  z-index: 1;\n  opacity: 0;\n  transition-duration: inherit;\n  transition-property: opacity;\n}\n.flipper--direction-up .flipper__page--shadowed::before {\n  background: linear-gradient(to top, transparent, black);\n}\n.flipper--direction-up .flipper__page--shadowed::after {\n  background: rgba(0, 0, 0, 0.15);\n}\n.flipper--direction-up .flipper__page.hover {\n  transform: rotateX(25deg);\n}\n.flipper--direction-up .flipper__page.hover::before {\n  opacity: 0.3;\n}\n.flipper--direction-up .flipper__page:not(.flipper__page--top) {\n  pointer-events: none;\n}\n.flipper--direction-up .flipper__page:not(.flipper__page--top)::after {\n  opacity: 1;\n}\n.flipper--direction-up .flipper__page--processing {\n  pointer-events: none;\n}\n.flipper--direction-up .flipper__page--flipped {\n  transform: rotateX(180deg);\n}\n.flipper--direction-up .flipper__page--flipped.hover {\n  transform: rotateX(155deg);\n}\n.flipper--direction-up .flipper__page--back {\n  transform: rotateX(180deg);\n}\n.flipper--direction-up .flipper__page--blank {\n  background-color: #fff;\n}\n.flipper--direction-up.flipper--fill-single {\n  overflow-y: clip;\n  overflow-x: visible;\n}\n.flipper--direction-up.flipper--fill-single .flipper__page {\n  top: 10%;\n}\n.flipper--direction-up.flipper--closed .flipper__page {\n  top: 0em;\n}\n.flipper--direction-up.flipper--closed.flipper--flipped .flipper__page {\n  top: calc(100% - 0em);\n}',{}),function(){function t(t,i){this.BASE_KLASS="flipper",this.DEFAULT={pages:[],direction:"left",fill:"both",time:800,page:{width:"30em",height:"30em",shadow:!0,hover:!0}},this.piles={flipped:[],initial:[]},this.PAGE_KLASS="".concat(this.BASE_KLASS,"__page"),this.maxZIndex=0,this.options=e(e({},this.DEFAULT),i),this.root=t}return t.prototype.init=function(){var t=this;this.root.classList.add(this.BASE_KLASS),this.root.classList.add("".concat(this.BASE_KLASS,"--direction-").concat(this.options.direction)),this.root.classList.add("".concat(this.BASE_KLASS,"--fill-").concat(this.options.fill)),this.createPages(),this.root.style.transitionDuration=this.options.time+"ms",setTimeout((function(){return t.pages.forEach((function(t){return t.transitionSwitcher()}))}))},t.prototype.createPages=function(){var t=this,e=this.root.querySelectorAll(".".concat(this.PAGE_KLASS)),n=Array.from(e).map((function(t){return t.innerHTML})),o=this.composeContent(n.length?n:this.options.pages);n.length&&(this.root.innerHTML=""),this.pages=o.reverse().map((function(e,n){var o=new i(n,t.root,e,{klass:t.PAGE_KLASS,width:t.options.page.width,height:t.options.page.height,shadow:t.options.page.shadow,duration:t.options.time,direction:t.options.direction,hover:t.options.page.hover});return o.subscribe("click",t.onPageClick.bind(t,o)),o.subscribe("draggable:end",t.onPageDragEnd.bind(t,o)),t.piles.initial.push(o),o})),this.checkPiles()},t.prototype.onPageClick=function(t,e){var i=this;this.bounceTimeout||(this.flipPage.call(this,t),this.bounceTimeout=window.setTimeout((function(){i.bounceTimeout=void 0}),this.options.time/2))},t.prototype.onPageDragEnd=function(t){(t.flipped?-1:1)*t.getAngle()>90&&this.flipPage(t)},t.prototype.flipPage=function(t){this.isTheTopOfThePile(t)&&(t===this.piles.initial[0]&&"single"===this.options.fill||(t.flip(),t.zIndex=this.maxZIndex+1,this.maxZIndex=t.zIndex,t.flipped?(this.piles.flipped.push(t),this.piles.initial.pop()):(this.piles.initial.push(t),this.piles.flipped.pop()),this.checkPiles()))},t.prototype.composeContent=function(t){if("single"===this.options.fill)return t;var e={front:null,back:null},i=t.reduce((function(t,i,n){return n%2==0?e.front=i:(e.back=i,t.push(e),e={front:null,back:null}),t}),[]);return e.front&&i.push(e),i},t.prototype.isTheTopOfThePile=function(t){return!(!t.flipped||t!=this.piles.flipped.slice(-1)[0])||!t.flipped&&t==this.piles.initial.slice(-1)[0]},t.prototype.resetPileTops=function(){var t=this;this.pages.forEach((function(e){e.onTop=t.isTheTopOfThePile(e)}))},t.prototype.checkPiles=function(){var t=this.BASE_KLASS+"--closed",e=this.BASE_KLASS+"--flipped";this.resetPileTops(),this.piles.flipped.length?this.piles.initial.length?(this.root.classList.remove(e),this.root.classList.remove(t),this.adjustRoot()):(this.root.classList.add(t),this.root.classList.add(e),this.adjustRoot(!0),this.resetZIndex(!1)):(this.root.classList.add(t),this.adjustRoot(!0),this.resetZIndex(!0))},t.prototype.resetZIndex=function(t){var e=this.pages.length;this.pages.forEach((function(i,n){return i.zIndex=t?n+1:e-n})),this.maxZIndex=e},t.prototype.adjustRoot=function(t){var e=this;void 0===t&&(t=!1);var i=function(t){return t.replace(/^(\d+)(.+)$/,(function(t,i,n){return parseInt(i)*("both"===e.options.fill?2:1.1)+n}))};({left:function(){e.root.style.width=t?e.options.page.width:i(e.options.page.width),e.root.style.height=e.options.page.height},up:function(){e.root.style.height=t?e.options.page.height:i(e.options.page.height),e.root.style.width=e.options.page.width}})[this.options.direction]()},t}()}();
+//# sourceMappingURL=flipper.min.js.map
+
+  </script>
+
+  <script>
+    const randomColor = () => `rgb(${new Array(3).fill(null).map(() => 255 * Math.random())})`;
+    const getPage = (_, i) => `
+      <div style="width: 100%; height: 100%; display: grid; align-items: center; justify-content: center; color: white; -webkit-font-stroke: 1px black; overflow: hidden; background-color: ${randomColor()};">
+        <h3>Page: ${i}</h3>
+      </div>
+    `;
+    const getDays = (amount) => new Array(amount).fill(null).map((_, i) => `
+      <div class="day" style="width: 1.2em; height: 1.2em; display: inline-block; margin: 0.3em;">${i + 1}</div>
+    `).join("");
+    const getMonth = (date) => date.toLocaleString('default', { month: 'long' });
+    const getCalendarPage = (date) => `
+      <div style="width: 100%; height: 100%; box-sizing: border-box; overflow: hidden; padding: 2em;">
+        <h1 style="color:${randomColor()};">${getMonth(date)} ${date.getYear()}</h1>
+        <div class="days" style="width: 15em; font-size: 18px; margin: 0 auto; padding-top: 1.5em;">
+          ${getDays(date.getDate())}
+        </div>
+      </div>
+    `;
+
+    const flippers = [{
+        pages: new Array(10).fill(null).map(getPage),
+        page: { width: "12em", height: "16em", shadow: false, hover: true, }
+      }, {
+        pages: new Array(10).fill(null).map(getPage),
+        direction: "up",
+        page: { width: "15em", height: "10em", shadow: true, hover: true, }
+      }, {
+        pages: new Array(10).fill(null).map(getPage),
+        // fill: "single",
+        // direction: "up",
+        page: { width: "31em", height: "24em", shadow: true, hover: true, }
+      },
+      // {
+      //   pages: new Array(12).fill(null).map((_, i) => getCalendarPage(new Date(1995, i + 1, 0))),
+      //   fill: "single",
+      //   direction: "up",
+      //   page: { width: "24em", height: "23em", shadow: true, hover: true, }
+      // }
+    ].map((opt, i) => new Flipper(document.querySelector(`.container${i + 1}`), opt));
+
+    flippers.forEach(f => f.init());
+    // flippers[2].init();
+  </script>
+</body>
+</html>

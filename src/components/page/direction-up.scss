@@ -1,51 +1,39 @@
-@mixin rotation($base_klass, $padding, $transitionTime) {
+@mixin rotation($base_klass, $padding) {
   $tiltAngle: 25deg;
 
   &--direction-up {
-    transition: height $transitionTime;
+    transition-property: height;
 
     .#{$base_klass}__page {
       top: 50%;
       transform: rotateX(0deg);
       transform-origin: 100% 0;
-      transition: transform $transitionTime, top $transitionTime;
+      transition-property: transform, top;
 
       &--shadowed {
-        &::before {
+        &::before, &::after {
           content: "";
           display: block;
           position: absolute;
           top: 0;left: 0;
           width: 100%;
           height: 100%;
-          // background: rgba(0, 0, 0, 0);
-          background: linear-gradient(to top, transparent, black);
           z-index: 1;
           opacity: 0;
-          transition: opacity $transitionTime;
+          transition-duration: inherit;
+          transition-property: opacity;
         }
-        &::after {
-          content: "";
-          display: block;
-          position: absolute;
-          top: 0;left: 0;
-          width: 100%;
-          height: 100%;
-          background: rgba(0, 0, 0, 0.15);
-          z-index: 1;
-          opacity: 0;
-          transition: opacity $transitionTime;
-        }
+        &::before { background: linear-gradient(to top, transparent, black); }
+        &::after { background: rgba(0, 0, 0, 0.15); }
       }
 
       &.hover {
         transform: rotateX($tiltAngle);
-        &::before {
-          opacity: 0.3;
-        }
+        &::before { opacity: 0.3; }
       }
 
       &:not(.#{$base_klass}__page--top) {
+        pointer-events: none;
         &::after { opacity: 1; }
       }
 
@@ -86,7 +74,6 @@
 
     &.#{$base_klass}--closed.#{$base_klass}--flipped {
       .#{$base_klass}__page {
-        // background-color: red;
         top: calc(100% - $padding);
       }
     }
