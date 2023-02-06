@@ -2,19 +2,32 @@
   &__page {
     position: absolute;
     width: 50%;
-    transition-timing-function: ease-in-out;
-    transform-origin: 0 100%;
-    // border: 1px solid var(--flipper-border-color);
-    background-color: var(--flipper-page-bg);
-    background-color: #fff;
+    // transition-timing-function: ease-in-out;
+    transition-timing-function: linear;
+    transform-origin: 0 0%;
     transform-style: preserve-3d;
     perspective: 500px;
+    background-color: var(--flipper-page-bg);
     user-select: none;
     cursor: pointer;
     -webkit-tap-highlight-color: transparent;
 
+    // NOTE: to make pointer event work properly
+    touch-action: none;
+
+    &--touch {
+      // pointer-events: none;
+    }
+
     &--processing {
       pointer-events: none;
+    }
+
+    &--shadow {
+      position: absolute;
+      z-index: 2;
+      background-color: rgba($color: #000000, $alpha: 0.5);
+      opacity: 0;
     }
 
     &--front, &--back {
@@ -22,6 +35,7 @@
       overflow: hidden;
       width: 100%;
       height: 100%;
+
       -webkit-backface-visibility: hidden; /* Safari */
       backface-visibility: hidden;
 

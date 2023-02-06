@@ -1,17 +1,14 @@
 @mixin rotation($base_klass, $padding) {
-  $tiltAngle: 25deg;
-
   &--direction-up {
-    transition-property: height;
+    transition-property: height, padding;
 
     .#{$base_klass}__page {
-      top: 50%;
+      top: 0;
       transform: rotateX(0deg);
       transform-origin: 100% 0;
-      transition-property: transform, top;
 
       &--shadowed {
-        &::before, &::after {
+        &::after {
           content: "";
           display: block;
           position: absolute;
@@ -20,16 +17,10 @@
           height: 100%;
           z-index: 1;
           opacity: 0;
-          transition-duration: inherit;
-          transition-property: opacity;
+          // TODO: show shadow on another page dynamically depending on angle of rotation
+          transition: opacity 800ms;
         }
-        &::before { background: linear-gradient(to top, transparent, black); }
         &::after { background: rgba(0, 0, 0, 0.15); }
-      }
-
-      &.hover {
-        transform: rotateX($tiltAngle);
-        &::before { opacity: 0.3; }
       }
 
       &:not(.#{$base_klass}__page--top) {
@@ -39,13 +30,6 @@
 
       &--processing {
         pointer-events: none;
-      }
-
-      &--flipped {
-        transform: rotateX(180deg);
-        &.hover {
-          transform: rotateX(180deg - $tiltAngle);
-        }
       }
 
       &--back {
@@ -58,24 +42,8 @@
     }
 
     &.#{$base_klass}--fill-single {
-      overflow-y: clip;
-      overflow-x: visible;
-
-      .#{$base_klass}__page {
-        top: 10%;
-      }
-    }
-
-    &.#{$base_klass}--closed {
-      .#{$base_klass}__page {
-        top: $padding;
-      }
-    }
-
-    &.#{$base_klass}--closed.#{$base_klass}--flipped {
-      .#{$base_klass}__page {
-        top: calc(100% - $padding);
-      }
+      // overflow-y: clip;
+      // overflow-x: visible;
     }
   }
 }
