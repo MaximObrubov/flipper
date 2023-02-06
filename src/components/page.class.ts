@@ -183,18 +183,17 @@ export class FlipperPage extends Draggable {
   public getDynamicAngle(): number {
     let angle = this.getAngle();
 
-    console.log(angle, this._hoverAngle)
-
+    if (this.flipped) {
+      if (angle > -1) angle = -1;
+      if (angle < -179) angle = -179;
+    } else {
+      if (angle < 1) angle = 1;
+      if (angle > 179) angle = 179;
+    }
     const rotor = {
-      left: this.flipped ? angle : -1 * angle,
+      left: this.flipped ? -180 - angle : -1 * angle,
       up: this.flipped ? 180 + angle : angle,
     }
-
-    console.log(angle, this._hoverAngle, rotor[this.options.direction])
-
-
-    return angle;
-
     return rotor[this.options.direction];
   }
 
@@ -206,21 +205,14 @@ export class FlipperPage extends Draggable {
    * @return  provides an angle in grad
    */
   private _getAngle(radius: number, dir: "x" | "y"): number {
-    const diff = Math.abs(this.coordinates.start[dir] - this.coordinates.current[dir]);
-    let angle = 90 * diff / this.scale / radius;
-    if (angle < 1) angle = 1;
-    if (angle > 179) angle = 179;
+    const diff = this.coordinates.start[dir] - this.coordinates.current[dir];
+    const angle = 90 * diff / this.scale / radius;
 
     if (!this._hoverAngle) return angle;
 
-    console.group('%c Custom log:', 'background: #00A9A5; color: #00D5DB; font-size: 16px;')
-    console.log(angle)
-    console.groupEnd()
-
-
     const rotor = {
-      left: this.flipped ? this._hoverAngle + angle  : -1 * angle + this._hoverAngle,
-      up: angle + (this.flipped ? -180 : 0) + this._hoverAngle,
+      left: angle - ((this.flipped ? 180 : 0) + this._hoverAngle),
+      up: angle + (this.flipped ? - 180 + this._hoverAngle : this._hoverAngle),
     }
     return rotor[this.options.direction];
   }
