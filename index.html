@@ -116,8 +116,8 @@
       {
         pages: new Array(12).fill(null).map((_, i) => getCalendarPage(new Date(1995, i + 1, 0))),
         fill: "single",
-        direction: "up",
-        page: { width: 380, height: 400, shadow: true, hover: true, }
+        // direction: "up",
+        page: { width: 381, height: 403, shadow: true, hover: true, }
       }
     ].map((opt, i) => new Flipper(document.querySelector(`.container${i + 1}`), opt));
 

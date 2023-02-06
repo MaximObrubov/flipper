@@ -19,6 +19,7 @@ export class FlipperPage extends Draggable {
   protected sites: FlipperPageSites = { front: null, back: null};
   protected options: FlipperPageSetting;
   protected currentHoverAngle: number = 0;
+  protected CLICK_TRESHOLD = 3;
 
   private _isProcessing = false;
   private _zIndex: number;
@@ -167,7 +168,7 @@ export class FlipperPage extends Draggable {
 
 
   public onDragEnd(event: PointerEvent) {
-    if (!this.coordDiff(this.options.direction)) {
+    if (this.coordDiff(this.options.direction) < this.CLICK_TRESHOLD) {
       this.HTMLNode.dispatchEvent(new Event("draggable:click"));
     } else if (this.getAngle()) {
       this.returnBack();
@@ -340,6 +341,9 @@ export class FlipperPage extends Draggable {
     const allTransforms = [];
     if (tr.angle) allTransforms.push(`rotate${this.isHorisontal() ? "Y" : "X"}(${tr.angle}deg)`);
     if (tr.scale) allTransforms.push(`scale(${tr.scale})`);
+
+    // NOTE: eliminate subpixel gaps
+    allTransforms.push(`translateZ(0)`);
     this.HTMLNode.style.transform = allTransforms.join(" ");
   }
 }
