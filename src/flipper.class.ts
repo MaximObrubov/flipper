@@ -57,11 +57,9 @@ export class Flipper extends Adjustable {
       this.reinit(ev.detail);
     });
 
-    this.root.addEventListener("flipper:page:angle", this.onPageAngle.bind(this)) ;
-
-    // setTimeout(() => {
-    //   this.root.style.transitionDuration = this.options.time + 'ms';
-    // }, 1);
+    if (this.options.fill === "both") {
+      this.root.addEventListener("flipper:page:angle", this.onPageAngle.bind(this)) ;
+    }
   }
 
   public reinit(options?: FlipperOptionsInterface) {
