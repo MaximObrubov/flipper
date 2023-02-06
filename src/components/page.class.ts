@@ -207,9 +207,12 @@ export class FlipperPage extends Draggable {
   private _getAngle(radius: number, dir: "x" | "y"): number {
     const diff = this.coordinates.start[dir] - this.coordinates.current[dir];
     const angle = 90 * diff / this.scale / radius;
-
     if (!this._hoverAngle) return angle;
-    return angle - ((this.flipped ? 180 : 0) + this._hoverAngle);
+    const rotor = {
+      left: angle - (this.flipped ? 180 : 0) + this._hoverAngle,
+      up: angle + (this.flipped ? 180 : 0) -   this._hoverAngle,
+    }
+    return rotor[this.options.direction];
   }
 
   private onMouseEnter() {

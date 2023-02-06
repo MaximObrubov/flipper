@@ -38,7 +38,7 @@
 
     <hr>
 
-    <div class="container container3" style="margin-right: 1em; vertical-align: top;">
+    <!-- <div class="container container3" style="margin-right: 1em; vertical-align: top;">
       <div class="flipper__page">
         <div style="padding: 1.5em; font-size: 10px;">
           <h1>Page 1</h1>
@@ -60,15 +60,15 @@
           <img style="vertical-align: top; display: inline-block;" src="https://cataas.com/cat?t=1" alt="">
         </div>
       </div>
-      <!-- <div class="flipper__page">
+      <div class="flipper__page">
         <div style="padding: 1.5em;">
           <h1>Page 4</h1>
           <p>Lorem ipsum dolor sit amet consectetur adipisicing elit. Dignissimos beatae maxime quam harum nisi dolorem totam quas rem. Odio amet doloremque dolores, debitis et repellendus natus beatae ut itaque dolore!</p>
         </div>
-      </div> -->
-    </div>
+      </div>
+    </div> -->
 
-    <div class="container container4">
+    <div class="container container3">
     </div>
 
 
@@ -101,23 +101,24 @@
 
     const flippers = [{
         pages: new Array(10).fill(null).map(getPage),
-        page: { width: "12em", height: "16em", shadow: false, hover: true, }
+        page: { width: 100, height: 200, shadow: false, hover: true, }
       }, {
         pages: new Array(10).fill(null).map(getPage),
         direction: "up",
-        page: { width: "15em", height: "10em", shadow: true, hover: true, }
-      }, {
-        pages: new Array(10).fill(null).map(getPage),
-        // fill: "single",
-        // direction: "up",
-        page: { width: "31em", height: "24em", shadow: true, hover: true, }
+        page: { width: 200, height:  100, shadow: true, hover: true, }
       },
       // {
-      //   pages: new Array(12).fill(null).map((_, i) => getCalendarPage(new Date(1995, i + 1, 0))),
-      //   fill: "single",
-      //   direction: "up",
-      //   page: { width: "24em", height: "23em", shadow: true, hover: true, }
-      // }
+      //   pages: new Array(10).fill(null).map(getPage),
+      //   // fill: "single",
+      //   // direction: "up",
+      //   page: { width: "31em", height: "24em", shadow: true, hover: true, }
+      // },
+      {
+        pages: new Array(12).fill(null).map((_, i) => getCalendarPage(new Date(1995, i + 1, 0))),
+        fill: "single",
+        direction: "up",
+        page: { width: 480, height: 500, shadow: true, hover: true, }
+      }
     ].map((opt, i) => new Flipper(document.querySelector(`.container${i + 1}`), opt));
 
     flippers.forEach(f => f.init());
