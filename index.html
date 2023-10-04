@@ -1,0 +1,127 @@
+<!DOCTYPE html><html lang="en"><head>
+  <meta charset="UTF-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <link rel="icon" type="image/x-icon" href="assets/Download.png">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin="">
+  <link href="https://fonts.googleapis.com/css2?family=Montserrat:ital,wght@0,200;0,300;0,400;0,500;1,200;1,300;1,400;1,700&amp;display=swap" rel="stylesheet">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Flipper Demo</title>
+
+
+  <style>
+
+    body {
+      background-color: #efefef;
+      font-family: 'Montserrat', sans-serif;
+    }
+
+    .container {
+      display: inline-block;
+    }
+
+    .container.not-filled {
+    }
+
+    hr {
+      border-width: 4px;
+      margin-bottom: 1.5em;
+    }
+  </style>
+</head>
+<body>
+  <div style="width: 1024px; margin: 0 auto; text-align: center;">
+    <div class="container container1" style="margin-right: 2em;"></div>
+    <div class="container container2" style="margin-right: 2em;"></div>
+
+    <hr>
+
+    <!-- <div class="container container3" style="margin-right: 1em; vertical-align: top;">
+      <div class="flipper__page">
+        <div style="padding: 1.5em; font-size: 10px;">
+          <h1>Page 1</h1>
+          <h3>Nothing interesting on page 1</h3>
+          <p>Lorem ipsum dolor sit amet consectetur adipisicing elit. Dignissimos beatae maxime quam harum nisi dolorem totam quas rem. Odio amet doloremque dolores, debitis et repellendus natus beatae ut itaque dolore!</p>
+          <img style="width: 46%; height: auto; font-size: 0; vertical-align: top; display: inline-block;" src="https://cataas.com/cat" alt="">
+          <img style="width: 46%; height: auto; font-size: 0; vertical-align: top; display: inline-block;" src="https://cataas.com/cat?t=1" alt="">
+        </div>
+      </div>
+      <div class="flipper__page">
+        <div style="padding: 1.5em;">
+          <h1>Page 2</h1>
+          <p>Lorem ipsum dolor sit amet consectetur adipisicing elit. Dignissimos beatae maxime quam harum nisi dolorem totam quas rem. Odio amet doloremque dolores, debitis et repellendus natus beatae ut itaque dolore!</p>
+        </div>
+      </div>
+      <div class="flipper__page">
+        <div style="padding: 1.5em;">
+          <h1>Page 3</h1>
+          <img style="vertical-align: top; display: inline-block;" src="https://cataas.com/cat?t=1" alt="">
+        </div>
+      </div>
+      <div class="flipper__page">
+        <div style="padding: 1.5em;">
+          <h1>Page 4</h1>
+          <p>Lorem ipsum dolor sit amet consectetur adipisicing elit. Dignissimos beatae maxime quam harum nisi dolorem totam quas rem. Odio amet doloremque dolores, debitis et repellendus natus beatae ut itaque dolore!</p>
+        </div>
+      </div>
+    </div> -->
+
+    <div class="container container3">
+    </div>
+
+
+  </div>
+
+
+  <script src="assets/flipper.min-0195c8ae.js"></script>
+  <!-- <script src="dist/flipper.min.js"></script> -->
+
+
+  <script>
+    const randomColor = () => `rgb(${new Array(3).fill(null).map(() => 255 * Math.random())})`;
+    const getPage = (_, i) => `
+      <div style="width: 100%; height: 100%; display: grid; align-items: center; justify-content: center; color: white; -webkit-font-stroke: 1px black; overflow: hidden; background-color: ${randomColor()};">
+        <h3>Page: ${i}</h3>
+      </div>
+    `;
+    const getDays = (amount) => new Array(amount).fill(null).map((_, i) => `
+      <div class="day" style="width: 1.2em; height: 1.2em; display: inline-block; margin: 0.3em;">${i + 1}</div>
+    `).join("");
+    const getMonth = (date) => date.toLocaleString('default', { month: 'long' });
+    const getCalendarPage = (date) => `
+      <div style="width: 100%; height: 100%; box-sizing: border-box; overflow: hidden; padding: 2em;">
+        <h1 style="color:${randomColor()};">${getMonth(date)} ${date.getYear()}</h1>
+        <div class="days" style="width: 15em; font-size: 18px; margin: 0 auto; padding-top: 1.5em;">
+          ${getDays(date.getDate())}
+        </div>
+      </div>
+    `;
+
+    const flippers = [{
+        pages: new Array(10).fill(null).map(getPage),
+        page: { width: 100, height: 200, shadow: false, hover: true, }
+      }, {
+        pages: new Array(10).fill(null).map(getPage),
+        direction: "up",
+        page: { width: 200, height:  100, shadow: true, hover: true, offset: [10, 15]}
+      },
+      // {
+      //   pages: new Array(10).fill(null).map(getPage),
+      //   // fill: "single",
+      //   // direction: "up",
+      //   page: { width: "31em", height: "24em", shadow: true, hover: true, }
+      // },
+      {
+        pages: new Array(12).fill(null).map((_, i) => getCalendarPage(new Date(1995, i + 1, 0))),
+        fill: "single",
+        // direction: "up",
+        page: { width: 381, height: 403, shadow: true, hover: true, }
+      }
+    ].map((opt, i) => new Flipper(document.querySelector(`.container${i + 1}`), opt));
+
+    flippers.forEach(f => f.init());
+    // flippers[2].init();
+  </script>
+
+
+</body></html>
