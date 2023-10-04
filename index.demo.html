@@ -12,27 +12,30 @@
   <style>
 
     body {
-      background-color: #efefef;
       font-family: 'Montserrat', sans-serif;
     }
 
     .container {
-      display: inline-block;
+      margin: 0 auto;
     }
 
     .container.not-filled {
     }
 
     hr {
-      border-width: 4px;
-      margin-bottom: 1.5em;
+      border-width: 3px;
+      margin-bottom: 3.5em;
+      margin-top: 2rem;
     }
   </style>
 </head>
 <body>
-  <div style="width: 1024px; margin: 0 auto; text-align: center;">
-    <div class="container container1" style="margin-right: 2em;"></div>
-    <div class="container container2" style="margin-right: 2em;"></div>
+  <div style="width: 1024px; margin: 0 auto; text-align: center; background: #efef; padding: 1rem;">
+    <h1>Vertical (no shadow)</h1>
+    <div class="container container1"></div>
+    <hr>
+    <h1>Horizontal (with shadow)</h1>
+    <div class="container container2"></div>
 
     <hr>
 
@@ -66,6 +69,7 @@
       </div>
     </div> -->
 
+    <h1>Vertical (fillmode: single)</h1>
     <div class="container container3">
     </div>
 
@@ -73,7 +77,7 @@
   </div>
 
 
-  <script src="assets/flipper.min-0195c8ae.js"></script>
+  <script src="assets/flipper.min-e58004df.js"></script>
   <!-- <script src="dist/flipper.min.js"></script> -->
 
 
@@ -99,11 +103,11 @@
 
     const flippers = [{
         pages: new Array(10).fill(null).map(getPage),
-        page: { width: 100, height: 200, shadow: false, hover: true, }
+        page: { width: 400, height: 400, shadow: false, hover: true, }
       }, {
         pages: new Array(10).fill(null).map(getPage),
         direction: "up",
-        page: { width: 200, height:  100, shadow: true, hover: true, offset: [10, 15]}
+        page: { width: 400, height:  200, shadow: true, hover: true, offset: [10, 15]}
       },
       // {
       //   pages: new Array(10).fill(null).map(getPage),
@@ -115,7 +119,7 @@
         pages: new Array(12).fill(null).map((_, i) => getCalendarPage(new Date(1995, i + 1, 0))),
         fill: "single",
         // direction: "up",
-        page: { width: 381, height: 403, shadow: true, hover: true, }
+        page: { width: 400, height: 400, shadow: true, hover: true, }
       }
     ].map((opt, i) => new Flipper(document.querySelector(`.container${i + 1}`), opt));
 
