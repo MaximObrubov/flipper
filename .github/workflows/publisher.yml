@@ -1,14 +1,21 @@
-name: learn-github-actions
+name: Build and Deploy
+permissions:
+  contents: write
 run-name: ${{ github.actor }} is learning GitHub Actions
 on: [push]
 jobs:
-  check-bats-version:
+  setup-packages:
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v4
-      - uses: actions/setup-node@v3
-        with:
-          node-version: '16.16'
-      - run: npm install
-      
+      - name: Checkout 🛎️
+        uses: actions/checkout@v3
 
+      - name: Install and Build 🔧 # This example project is built using npm and outputs the result to the 'build' folder. Replace with the commands required to build your project, or remove this step entirely if your site is pre-built.
+        run: |
+          npm ci
+          npm run build:demo
+
+      - name: Deploy 🚀
+        uses: JamesIves/github-pages-deploy-action@v4
+        with:
+          folder: demo # The folder the action should deploy.
