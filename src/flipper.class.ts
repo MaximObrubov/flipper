@@ -237,7 +237,9 @@ export class Flipper extends Adjustable {
   }
 
   private onPageDragEnd(page: FlipperPage) {
-    if ((page.flipped ? -1 : 1) * page.getAngle() >  90) this.flipPage(page);
+    // TODO: should be in FlipperPage class, and trigger event (probably)
+    const enoughAngle = (page.flipped ? -1 : 1) * page.getAngle() >  90;
+    enoughAngle ? this.flipPage(page) : page.returnBack();
   }
 
   private flipPage(page: FlipperPage) {

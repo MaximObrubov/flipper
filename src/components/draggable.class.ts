@@ -62,7 +62,7 @@ export class Draggable {
   }
 
   protected onDragEnd(event: PointerEvent) {
-    // NOTE: could be redefined fron ancestor
+    this.triggerEvent("draggable:end");
   }
 
   protected onDragStart(event: PointerEvent) {
@@ -84,9 +84,8 @@ export class Draggable {
 
       this.throttleTimeout = undefined;
       this.HTMLNode.style.zIndex = initialZi;
-      this.onDragEnd(event);
       this.isDragged = false;
-      this.triggerEvent("draggable:end");
+      this.onDragEnd(event);
     };
     // this.subscribe("pointermove", mover);
     // this.subscribe("pointerup",  ender);

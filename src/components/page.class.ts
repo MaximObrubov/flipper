@@ -121,11 +121,15 @@ export class FlipperPage extends Draggable {
       up: this.flipped ? 0 : 180,
     }
 
+    const stepFunc = (angle: number) => {
+      this.setAngle(angle);
+    }
+
     animateByStep(
       this._angle,
       angles[this.options.direction],
       this.options.duration,
-      this.setAngle.bind(this)
+      stepFunc
     ).then(() => {
       this.isProcessing = false;
       this.flipped = !this.flipped;
@@ -168,11 +172,8 @@ export class FlipperPage extends Draggable {
 
 
   public onDragEnd(event: PointerEvent) {
-    if (this.coordDiff(this.options.direction) < this.CLICK_TRESHOLD) {
-      this.HTMLNode.dispatchEvent(new Event("draggable:click"));
-    } else if (this.getAngle()) {
-      this.returnBack();
-    }
+    const isClick = Math.abs(this.coordDiff(this.options.direction)) < this.CLICK_TRESHOLD;
+    this.triggerEvent(isClick ? "draggable:click" : "draggable:end")
   }
 
   public getAngle(): number {
@@ -196,6 +197,30 @@ export class FlipperPage extends Draggable {
       up: this.flipped ? 180 + angle : angle,
     }
     return rotor[this.options.direction];
+  }
+
+  /**
+   * returns page to the same position
+   *
+   * @param   {Function}  callback  - callback to be executed afted animation
+   */
+  public returnBack(callback?: () => void) {
+    const returnAngle = {
+      left: this.flipped ? -180 : 0,
+      up: this.flipped ? 180 : 0,
+    }
+    const stepFunc = (angle: number) => {
+      if (this.options.hover) this._hoverAngle = angle;
+      this.setAngle(angle);
+    }
+    animateByStep(
+      this._angle,
+      returnAngle[this.options.direction],
+      this.options.duration / 3,
+      stepFunc
+    ).then(() => {
+      if (typeof callback === "function") callback();
+    });
   }
 
   /**
@@ -232,15 +257,21 @@ export class FlipperPage extends Draggable {
     }
 
     const stepFunc = (angle: number) => {
-      if (this.options.hover) this._hoverAngle = angle;
+      if (this.options.hover) {
+        this._hoverAngle = angle;
+      };
       this.setAngle(angle);
+    }
+    const shouldBreak = () => {
+      return this.isDragged;
     }
 
     animateByStep(
       this._angle,
       tiltAngle[this.options.direction],
       this.options.duration / 3,
-      stepFunc
+      stepFunc,
+      shouldBreak
     ).then(() => {
 
     });
@@ -249,25 +280,6 @@ export class FlipperPage extends Draggable {
   private onMouseLeave() {
     if (this.isProcessing || this.isDragged) return;
     this.returnBack();
-  }
-
-  private returnBack(callback?: () => void) {
-    const returnAngle = {
-      left: this.flipped ? -180: 0,
-      up: this.flipped ? 180: 0,
-    }
-    const stepFunc = (angle: number) => {
-      if (this.options.hover) this._hoverAngle = angle;
-      this.setAngle(angle);
-    }
-    animateByStep(
-      this._angle,
-      returnAngle[this.options.direction],
-      this.options.duration / 3,
-      stepFunc
-    ).then(() => {
-      if (typeof callback === "function") callback();
-    });
   }
 
   private createNode(opt: FlipperPageSetting, withOffset = false): HTMLDivElement {
